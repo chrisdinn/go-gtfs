@@ -75,6 +75,7 @@ func loadGTFS(g *GTFS, filter map[string]bool) error {
 		"calendar.txt":       &g.Calendars,
 		"calendar_dates.txt": &g.CalendarDates,
 		"routes.txt":         &g.Routes,
+		"shapes.txt":         &g.Shapes,
 		"stops.txt":          &g.Stops,
 		"stop_times.txt":     &g.StopsTimes,
 		"transfers.txt":      &g.Transfers,

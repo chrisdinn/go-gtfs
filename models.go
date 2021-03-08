@@ -6,6 +6,7 @@ type GTFS struct {
 	Agency        Agency
 	Agencies      []Agency
 	Routes        []Route
+	Shapes        []Shape
 	Stops         []Stop
 	StopsTimes    []StopTime
 	Trips         []Trip
@@ -98,4 +99,13 @@ type Agency struct {
 	Timezone string `csv:"agency_timezone"`
 	Langue   string `csv:"agency_lang"`
 	Phone    string `csv:"agency_phone"`
+}
+
+// Shape -
+type Shape struct {
+	ID       string  `csv:"shape_id"`
+	Lat      float64 `csv:"shape_pt_lat"`
+	Long     float64 `csv:"shape_pt_lon"`
+	Seq      int     `csv:"shape_pt_sequence"`
+	Distance float64 `csv:"shape_dist_traveled"`
 }
