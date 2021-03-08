@@ -101,6 +101,7 @@ func TestRead(t *testing.T) {
 		len(gtfs.Calendars) == 0 ||
 		len(gtfs.CalendarDates) == 0 ||
 		len(gtfs.Routes) == 0 ||
+		len(gtfs.Shapes) == 0 ||
 		len(gtfs.Stops) == 0 ||
 		len(gtfs.StopsTimes) == 0 ||
 		len(gtfs.Transfers) == 0 ||
