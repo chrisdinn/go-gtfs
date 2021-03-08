@@ -1,7 +1,9 @@
 package gtfs
 
 import (
+	"archive/zip"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"path"
@@ -101,6 +103,54 @@ func loadGTFS(g *GTFS, filter map[string]bool) error {
 	}
 
 	return nil
+}
+
+// Read - Read GTFS files from a reader, eg an HTTP response in memory.
+// @param reader: an io.ReaderAt (eg. bytes.Reader) containing the entire feed
+// in zip format.
+// @param size: the total size of the GTFS feed inside reader, in bytes.
+// @return a filled GTFS or an error
+func Read(reader io.ReaderAt, size int64) (*GTFS, error) {
+	zipFile, err := zip.NewReader(reader, size)
+	if err != nil {
+		return nil, fmt.Errorf("Error loading GTFS: reader not in zip format")
+	}
+	g := &GTFS{}
+
+	// List all files that will be loaded and there dest
+	filesToLoad := map[string]interface{}{
+		"agency.txt":         &g.Agencies,
+		"calendar.txt":       &g.Calendars,
+		"calendar_dates.txt": &g.CalendarDates,
+		"routes.txt":         &g.Routes,
+		"stops.txt":          &g.Stops,
+		"stop_times.txt":     &g.StopsTimes,
+		"transfers.txt":      &g.Transfers,
+		"trips.txt":          &g.Trips,
+	}
+
+	// Read the files
+	for _, file := range zipFile.File {
+		dest, ok := filesToLoad[file.Name]
+		if !ok {
+			continue
+		}
+		fd, err := file.Open()
+		if err != nil {
+			return nil, fmt.Errorf("Error opening file (%v)\n	==> %v", file.Name, err)
+		}
+		defer fd.Close()
+		err = csvtag.LoadFromReader(fd, dest)
+		if err != nil {
+			return nil, fmt.Errorf("Error reading CSV (%v)\n	==> %v", file.Name, err)
+		}
+	}
+
+	if len(g.Agencies) > 0 {
+		g.Agency = g.Agencies[0]
+	}
+
+	return g, nil
 }
 
 // Dump GTFS data to an already existing directory

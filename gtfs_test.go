@@ -1,7 +1,9 @@
 package gtfs
 
 import (
+	"bytes"
 	"fmt"
+	"io/ioutil"
 	"path"
 	"testing"
 )
@@ -81,6 +83,31 @@ func TestLoadSplittedBad(t *testing.T) {
 func TestLoadSplittedNoDir(t *testing.T) {
 	_, err := LoadSplitted(path.Join("gtfs_test", "no_dir"), nil)
 	if err == nil {
+		t.Fail()
+	}
+}
+
+func TestRead(t *testing.T) {
+	zb, err := ioutil.ReadFile(path.Join("gtfs_test", "zipped", "feed.zip"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	gtfs, err := Read(bytes.NewReader(zb), int64(len(zb)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(gtfs.Agencies) == 0 ||
+		len(gtfs.Calendars) == 0 ||
+		len(gtfs.CalendarDates) == 0 ||
+		len(gtfs.Routes) == 0 ||
+		len(gtfs.Stops) == 0 ||
+		len(gtfs.StopsTimes) == 0 ||
+		len(gtfs.Transfers) == 0 ||
+		len(gtfs.Trips) == 0 {
+		t.Errorf("%v", gtfs)
+	}
+
+	if gtfs.Agencies[0] != gtfs.Agency {
 		t.Fail()
 	}
 }
