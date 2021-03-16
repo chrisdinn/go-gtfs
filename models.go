@@ -41,14 +41,15 @@ type Trip struct {
 
 // Stop -
 type Stop struct {
-	ID          string  `csv:"stop_id"`
-	Code        string  `csv:"stop_code"`
-	Name        string  `csv:"stop_name"`
-	Description string  `csv:"stop_desc"`
-	Latitude    float64 `csv:"stop_lat"`
-	Longitude   float64 `csv:"stop_lon"`
-	Type        string  `csv:"location_type"`
-	Parent      string  `csv:"parent_station"`
+	ID            string  `csv:"stop_id"`
+	Code          string  `csv:"stop_code"`
+	Name          string  `csv:"stop_name"`
+	Description   string  `csv:"stop_desc"`
+	Latitude      float64 `csv:"stop_lat"`
+	Longitude     float64 `csv:"stop_lon"`
+	Type          string  `csv:"location_type"`
+	Parent        string  `csv:"parent_station"`
+	Accessibility string  `csv:"wheelchair_boarding"`
 }
 
 // StopTime -
