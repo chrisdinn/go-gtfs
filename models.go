@@ -61,6 +61,7 @@ type StopTime struct {
 	Shape        float64 `csv:"shape_dist_traveled"`
 	Departure    string  `csv:"departure_time"`
 	Arrival      string  `csv:"arrival_time"`
+	PickupType   string  `csv:"pickup_type"`
 }
 
 // Calendar -
